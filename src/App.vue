@@ -15,7 +15,7 @@
                 type="text"
                 name="search"
                 id="search"
-                v-model="searchText"
+                v-model="searchInput"
               />
               <button type="submit">Cerca</button>
             </form>
@@ -25,10 +25,13 @@
     </header>
     <main>
       <ul>
-        <li v-for="film in films" :key="film.id">
+        <li v-for="(film, index) in films" :key="film.id">
           <p>{{ film.title }}</p>
           <p>{{ film.original_title }}</p>
-          <p>{{ film.original_language }}</p>
+          <img
+            :src="'https://flagcdn.com/28x21/' + nationFlag(index) + '.png'"
+            alt="film.title"
+          />
           <p>{{ film.vote_average }}</p>
         </li>
       </ul>
@@ -42,7 +45,7 @@ export default {
   name: "App",
   data() {
     return {
-      searchText: "",
+      searchInput: "",
       films: null,
     };
   },
@@ -50,18 +53,26 @@ export default {
     searchFilm() {
       axios
         .get(
-          `https://api.themoviedb.org/3/search/movie?api_key=be95f9eaaa0cffacac52f868a0272550&language=it-IT&page=1&include_adult=false&query=${this.searchText}`
+          `https://api.themoviedb.org/3/search/movie?api_key=be95f9eaaa0cffacac52f868a0272550&language=it-IT&page=1&include_adult=false&query=${this.searchInput}`
         )
         .then((response) => {
           this.films = response.data.results;
         });
     },
+    nationFlag(index) {
+      if (this.films[index].original_language === "en") {
+        this.films[index].original_language = "us";
+      } else if (this.films[index].original_language === "ja") {
+        this.films[index].original_language = "jp";
+      } else if (this.films[index].original_language === "el") {
+        this.films[index].original_language = "gr";
+      }
+      return this.films[index].original_language;
+    },
   },
-  components: {},
 };
 </script>
 
 <style lang="scss">
-@import "@/assets/style.scss"
-
+@import "@/assets/style.scss";
 </style>

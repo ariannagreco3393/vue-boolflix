@@ -26,14 +26,23 @@
     <main>
       <ul>
         <li v-for="(film, index) in films" :key="film.id">
-          <img :src="'https://image.tmdb.org/t/p/w200/' + film.poster_path " alt="">
+          <img
+            :src="'https://image.tmdb.org/t/p/w342/' + film.poster_path"
+            alt=""
+          />
           <h4>{{ film.title || film.name }}</h4>
           <p>{{ film.original_title || film.original_name }}</p>
           <img
             :src="'https://flagcdn.com/28x21/' + nationFlag(index) + '.png'"
             alt="film.title"
           />
-          <p>{{ film.vote_average }}</p>
+          <p style="color: gold">
+            <font-awesome-icon
+              v-for="numberStar in voteStars(index)"
+              :key="numberStar"
+              icon="fa-solid fa-star"
+            />
+          </p>
         </li>
       </ul>
     </main>
@@ -48,19 +57,26 @@ export default {
     return {
       searchInput: "",
       films: null,
+      stars: 5,
     };
   },
   methods: {
     searchFilm() {
-      const APIrequestFilms = axios.get(`https://api.themoviedb.org/3/search/movie?api_key=be95f9eaaa0cffacac52f868a0272550&language=it-IT&page=1&include_adult=false&query=${this.searchInput}`);
-      const APIrequestSeries = axios.get(`https://api.themoviedb.org/3/search/tv?api_key=be95f9eaaa0cffacac52f868a0272550&language=it-IT&page=1&include_adult=false&query=${this.searchInput}`);
-      axios.all([APIrequestFilms, APIrequestSeries]).then(axios.spread((...responses) => {
+      const APIrequestFilms = axios.get(
+        `https://api.themoviedb.org/3/search/movie?api_key=be95f9eaaa0cffacac52f868a0272550&language=it-IT&page=1&include_adult=false&query=${this.searchInput}`
+      );
+      const APIrequestSeries = axios.get(
+        `https://api.themoviedb.org/3/search/tv?api_key=be95f9eaaa0cffacac52f868a0272550&language=it-IT&page=1&include_adult=false&query=${this.searchInput}`
+      );
+      axios.all([APIrequestFilms, APIrequestSeries]).then(
+        axios.spread((...responses) => {
           this.films = [
             ...responses[0].data.results,
-            ...responses[1].data.results
-          ]
+            ...responses[1].data.results,
+          ];
           this.searchInput = "";
-        }));
+        })
+      );
     },
     nationFlag(index) {
       if (this.films[index].original_language === "en") {
@@ -73,6 +89,16 @@ export default {
         this.films[index].original_language = "cz";
       }
       return this.films[index].original_language;
+    },
+    voteStars(index) {
+      const starsVote = Math.round(this.films[index].vote_average / 2);
+      let integerStar = 0;
+      for (let i = 0; i < this.stars; i++) {
+        if (parseInt(starsVote) > i) {
+          integerStar += 1;
+        }
+        return integerStar;
+      }
     },
   },
 };

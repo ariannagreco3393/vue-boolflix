@@ -5,7 +5,7 @@
         <div class="row align-items-center">
           <div class="col-6">
             <div class="logo">
-              <img src="@/assets/img/boolflix-logo.png" alt="" />
+              <img height="50px" src="@/assets/img/boolflix-logo.png" alt="" />
             </div>
           </div>
           <div class="col-6">
@@ -26,8 +26,8 @@
     <main>
       <ul>
         <li v-for="(film, index) in films" :key="film.id">
-          <p>{{ film.title }}</p>
-          <p>{{ film.original_title }}</p>
+          <p>{{ film.title || film.name }}</p>
+          <p>{{ film.original_title || film.original_name }}</p>
           <img
             :src="'https://flagcdn.com/28x21/' + nationFlag(index) + '.png'"
             alt="film.title"
@@ -51,13 +51,15 @@ export default {
   },
   methods: {
     searchFilm() {
-      axios
-        .get(
-          `https://api.themoviedb.org/3/search/movie?api_key=be95f9eaaa0cffacac52f868a0272550&language=it-IT&page=1&include_adult=false&query=${this.searchInput}`
-        )
-        .then((response) => {
-          this.films = response.data.results;
-        });
+      const APIrequestFilms = axios.get(`https://api.themoviedb.org/3/search/movie?api_key=be95f9eaaa0cffacac52f868a0272550&language=it-IT&page=1&include_adult=false&query=${this.searchInput}`);
+      const APIrequestSeries = axios.get(`https://api.themoviedb.org/3/search/tv?api_key=be95f9eaaa0cffacac52f868a0272550&language=it-IT&page=1&include_adult=false&query=${this.searchInput}`);
+      axios.all([APIrequestFilms, APIrequestSeries]).then(axios.spread((...responses) => {
+          this.films = [
+            ...responses[0].data.results,
+            ...responses[1].data.results
+          ]
+          this.searchInput = "";
+        }));
     },
     nationFlag(index) {
       if (this.films[index].original_language === "en") {
@@ -66,6 +68,8 @@ export default {
         this.films[index].original_language = "jp";
       } else if (this.films[index].original_language === "el") {
         this.films[index].original_language = "gr";
+      } else if (this.films[index].original_language === "cs") {
+        this.films[index].original_language = "cz";
       }
       return this.films[index].original_language;
     },

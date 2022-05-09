@@ -26,7 +26,8 @@
     <main>
       <ul>
         <li v-for="(film, index) in films" :key="film.id">
-          <p>{{ film.title || film.name }}</p>
+          <img :src="'https://image.tmdb.org/t/p/w200/' + film.poster_path " alt="">
+          <h4>{{ film.title || film.name }}</h4>
           <p>{{ film.original_title || film.original_name }}</p>
           <img
             :src="'https://flagcdn.com/28x21/' + nationFlag(index) + '.png'"

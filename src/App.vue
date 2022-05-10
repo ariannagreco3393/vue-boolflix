@@ -25,31 +25,51 @@
     </header>
     <main>
       <div class="container">
-        <div class="row d-flex">
-          <div class="col films-card" v-for="(film, index) in films" :key="film.id">
-            <ul>
-              <li >
-                <img
-                  :src="'https://image.tmdb.org/t/p/w342/' + film.poster_path"
-                  alt=""
-                />
-                <h4>{{ film.title || film.name }}</h4>
-                <p>{{ film.original_title || film.original_name }}</p>
-                <img
-                  :src="
-                    'https://flagcdn.com/28x21/' + nationFlag(index) + '.png'
-                  "
-                  alt="film.title"
-                />
-                <p class="stars">
+        <div class="row">
+          <div class="col" v-for="(film, index) in films" :key="film.id">
+            <div class="card_films">
+              <img
+                class="img-fluid"
+                :src="'https://image.tmdb.org/t/p/w342/' + film.poster_path"
+                alt=""
+              />
+              <ul class="card_text">
+                <li class="title">
+                  <p><strong>Titolo: </strong>{{ film.title || film.name }}</p>
+                </li>
+                <li class="original_title">
+                  <p>
+                    <strong>Titolo originale: </strong
+                    >{{ film.original_title || film.original_name }}
+                  </p>
+                </li>
+                <li class="original_language">
+                  <strong>Lingua originale: </strong
+                  ><img
+                    :src="
+                      'https://flagcdn.com/20x15/' + nationFlag(index) + '.png'
+                    "
+                    alt="film.title"
+                  />
+                </li>
+                <li class="rate">
+                  <strong class="text-white">Voto: </strong>
                   <font-awesome-icon
-                    v-for="vote in voteStars(index)"
-                    :key="vote"
+                    class="stars"
+                    style="color: gold"
+                    v-for="rate in voteStars(index)"
+                    :key="rate"
                     icon="fa-solid fa-star"
                   />
-                </p>
-              </li>
-            </ul>
+                </li>
+                <li>
+                  <p class="overview">
+                    <strong>Overview: </strong
+                    >{{ film.overview || film.overview }}
+                  </p>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -100,30 +120,65 @@ export default {
     voteStars(index) {
       const starsVote = Math.round(this.films[index].vote_average / 2);
       console.log(starsVote);
-      return starsVote
+      return starsVote;
     },
   },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@/assets/style.scss";
 
 header {
   .row {
-  height: 100px;
-
+    height: 100px;
   }
 }
 
 main {
-  height: calc(100vh - 100px);
+  .card_films {
+    width: 400px;
+    height: 550px;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.84);
+    position: relative;
+    margin: 1rem 0;
+    overflow-y: scroll;
+  }
+  .card_text {
+    padding: 2rem;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.759);
+  }
+  .overview {
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
+
 }
 
-.stars {
-  color: gold;
+/* width */
+::-webkit-scrollbar {
+  width: 3px;
 }
 
+/* Track */
+::-webkit-scrollbar-track {
+  background: #040404;
+}
 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #484242;
+}
 
-</style>
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+</style>>
+

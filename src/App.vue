@@ -36,7 +36,7 @@
             :src="'https://flagcdn.com/28x21/' + nationFlag(index) + '.png'"
             alt="film.title"
           />
-          <p style="color: gold">
+          <p class="stars">
             <font-awesome-icon
               v-for="numberStar in voteStars(index)"
               :key="numberStar"
@@ -57,7 +57,6 @@ export default {
     return {
       searchInput: "",
       films: null,
-      stars: 5,
     };
   },
   methods: {
@@ -91,13 +90,11 @@ export default {
       return this.films[index].original_language;
     },
     voteStars(index) {
-      const starsVote = Math.round(this.films[index].vote_average / 2);
-      let integerStar = 0;
-      for (let i = 0; i < this.stars; i++) {
-        if (parseInt(starsVote) > i) {
-          integerStar += 1;
-        }
-        return integerStar;
+      const starsVote = Math.ceil(this.films[index].vote_average / 2);
+      console.log(starsVote);
+      
+      for (let i = 0; i < 5; i++) {
+        
       }
     },
   },
@@ -106,4 +103,9 @@ export default {
 
 <style lang="scss">
 @import "@/assets/style.scss";
+
+.stars {
+  color: gold;
+}
+
 </style>

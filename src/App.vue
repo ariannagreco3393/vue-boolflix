@@ -90,12 +90,9 @@ export default {
       return this.films[index].original_language;
     },
     voteStars(index) {
-      const starsVote = Math.ceil(this.films[index].vote_average / 2);
+      const starsVote = Math.round(this.films[index].vote_average / 2);
       console.log(starsVote);
-      
-      for (let i = 0; i < 5; i++) {
-        
-      }
+
     },
   },
 };

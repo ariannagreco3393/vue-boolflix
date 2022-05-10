@@ -29,7 +29,7 @@
           <div class="col" v-for="(film, index) in films" :key="film.id">
             <div class="card_films">
               <img
-                class="img-fluid"
+                class="img-fluid cover_film"
                 :src="'https://image.tmdb.org/t/p/w342/' + film.poster_path"
                 alt=""
               />
@@ -135,16 +135,40 @@ header {
   }
 }
 
+input[type="text"] {
+  padding: 0.3rem;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+button[type="submit"] {
+  margin-left: 10px;
+  color: white;
+  padding: 0.4rem;
+  background-color: rgb(220, 27, 39);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 main {
+  height: 100%;
   .card_films {
     width: 400px;
     height: 550px;
-    object-fit: cover;
     border: 1px solid rgba(255, 255, 255, 0.84);
     position: relative;
     margin: 1rem 0;
-    overflow-y: scroll;
+    overflow-y: auto;
+    .cover_film {
+      height: 100%;
+      width: 100%;
+    }
   }
+
   .card_text {
     padding: 2rem;
     width: 100%;
@@ -152,13 +176,16 @@ main {
     position: absolute;
     top: 0;
     background-color: rgba(0, 0, 0, 0.759);
+    display: none;
+  }
+
+  .card_films:hover .card_text {
+    display: block;
   }
   .overview {
     text-align: justify;
     text-justify: inter-word;
   }
-
-
 }
 
 /* width */

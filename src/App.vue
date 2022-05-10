@@ -3,12 +3,12 @@
     <header>
       <div class="container">
         <div class="row align-items-center">
-          <div class="col-6">
+          <div class="col">
             <div class="logo">
               <img height="50px" src="@/assets/img/boolflix-logo.png" alt="" />
             </div>
           </div>
-          <div class="col-6">
+          <div class="col text-center">
             <form action="#" method="get" @submit.prevent="searchFilm">
               <input
                 placeholder="Cosa vuoi guardare?"
@@ -24,27 +24,35 @@
       </div>
     </header>
     <main>
-      <ul>
-        <li v-for="(film, index) in films" :key="film.id">
-          <img
-            :src="'https://image.tmdb.org/t/p/w342/' + film.poster_path"
-            alt=""
-          />
-          <h4>{{ film.title || film.name }}</h4>
-          <p>{{ film.original_title || film.original_name }}</p>
-          <img
-            :src="'https://flagcdn.com/28x21/' + nationFlag(index) + '.png'"
-            alt="film.title"
-          />
-          <p class="stars">
-            <font-awesome-icon
-              v-for="numberStar in voteStars(index)"
-              :key="numberStar"
-              icon="fa-solid fa-star"
-            />
-          </p>
-        </li>
-      </ul>
+      <div class="container">
+        <div class="row d-flex">
+          <div class="col films-card" v-for="(film, index) in films" :key="film.id">
+            <ul>
+              <li >
+                <img
+                  :src="'https://image.tmdb.org/t/p/w342/' + film.poster_path"
+                  alt=""
+                />
+                <h4>{{ film.title || film.name }}</h4>
+                <p>{{ film.original_title || film.original_name }}</p>
+                <img
+                  :src="
+                    'https://flagcdn.com/28x21/' + nationFlag(index) + '.png'
+                  "
+                  alt="film.title"
+                />
+                <p class="stars">
+                  <font-awesome-icon
+                    v-for="vote in voteStars(index)"
+                    :key="vote"
+                    icon="fa-solid fa-star"
+                  />
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
 </template>
@@ -92,7 +100,7 @@ export default {
     voteStars(index) {
       const starsVote = Math.round(this.films[index].vote_average / 2);
       console.log(starsVote);
-
+      return starsVote
     },
   },
 };
@@ -101,8 +109,21 @@ export default {
 <style lang="scss">
 @import "@/assets/style.scss";
 
+header {
+  .row {
+  height: 100px;
+
+  }
+}
+
+main {
+  height: calc(100vh - 100px);
+}
+
 .stars {
   color: gold;
 }
+
+
 
 </style>

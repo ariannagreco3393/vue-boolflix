@@ -4,21 +4,10 @@
       <div class="container">
         <div class="row align-items-center">
           <div class="col">
-            <div class="logo">
-              <img height="50px" src="@/assets/img/boolflix-logo.png" alt="" />
-            </div>
+            <logoComponent/>
           </div>
           <div class="col text-center">
-            <form action="#" method="get" @submit.prevent="searchFilm">
-              <input
-                placeholder="Cosa vuoi guardare?"
-                type="text"
-                name="search"
-                id="search"
-                v-model="searchInput"
-              />
-              <button type="submit">Cerca</button>
-            </form>
+            <formComponent @formSubmit="searchFilm" v-model="searchInput"/>
           </div>
         </div>
       </div>
@@ -79,8 +68,14 @@
 
 <script>
 import axios from "axios";
+import logoComponent from "@/components/logoComponent.vue";
+import formComponent from "@/components/formComponent.vue";
 export default {
   name: "App",
+  components: {
+    logoComponent,
+    formComponent
+  },
   data() {
     return {
       searchInput: "",

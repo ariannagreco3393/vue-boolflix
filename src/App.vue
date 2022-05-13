@@ -4,10 +4,10 @@
       <div class="container">
         <div class="row align-items-center">
           <div class="col">
-            <logoComponent/>
+            <logoComponent />
           </div>
           <div class="col text-center">
-            <formComponent @formSubmit="searchFilm" v-model="searchInput"/>
+            <formComponent @formSubmit="searchFilm" v-model="searchInput" />
           </div>
         </div>
       </div>
@@ -15,7 +15,13 @@
     <main>
       <div class="container">
         <div class="row">
-          <div class="col" v-for="(film, index) in films" :key="film.id">
+          <div
+            class="col"
+            v-for="(film, index) in films"
+            :key="film.id"
+            :index="index"
+            :film="film"
+          >
             <div class="card_films">
               <img
                 class="img-fluid cover_film"
@@ -74,7 +80,7 @@ export default {
   name: "App",
   components: {
     logoComponent,
-    formComponent
+    formComponent,
   },
   data() {
     return {
@@ -83,23 +89,6 @@ export default {
     };
   },
   methods: {
-    searchFilm() {
-      const APIrequestFilms = axios.get(
-        `https://api.themoviedb.org/3/search/movie?api_key=be95f9eaaa0cffacac52f868a0272550&language=it-IT&page=1&include_adult=false&query=${this.searchInput}`
-      );
-      const APIrequestSeries = axios.get(
-        `https://api.themoviedb.org/3/search/tv?api_key=be95f9eaaa0cffacac52f868a0272550&language=it-IT&page=1&include_adult=false&query=${this.searchInput}`
-      );
-      axios.all([APIrequestFilms, APIrequestSeries]).then(
-        axios.spread((...responses) => {
-          this.films = [
-            ...responses[0].data.results,
-            ...responses[1].data.results,
-          ];
-          this.searchInput = "";
-        })
-      );
-    },
     nationFlag(index) {
       if (this.films[index].original_language === "en") {
         this.films[index].original_language = "us";
@@ -116,6 +105,23 @@ export default {
       const starsVote = Math.round(this.films[index].vote_average / 2);
       console.log(starsVote);
       return starsVote;
+    },
+    searchFilm() {
+      const APIrequestFilms = axios.get(
+        `https://api.themoviedb.org/3/search/movie?api_key=be95f9eaaa0cffacac52f868a0272550&language=it-IT&page=1&include_adult=false&query=${this.searchInput}`
+      );
+      const APIrequestSeries = axios.get(
+        `https://api.themoviedb.org/3/search/tv?api_key=be95f9eaaa0cffacac52f868a0272550&language=it-IT&page=1&include_adult=false&query=${this.searchInput}`
+      );
+      axios.all([APIrequestFilms, APIrequestSeries]).then(
+        axios.spread((...responses) => {
+          this.films = [
+            ...responses[0].data.results,
+            ...responses[1].data.results,
+          ];
+          this.searchInput = "";
+        })
+      );
     },
   },
 };
